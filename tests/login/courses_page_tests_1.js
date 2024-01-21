@@ -6,7 +6,7 @@ require('dotenv').config()
 import {test_url, cc_url} from '../../data_config'
 
 fixture `sites - courses 1`
-    .page(test_url); // Use shared URL
+    .page(`${test_url}`); // Use shared URL
 
 test
   .meta({ scope: 'sanity'})
