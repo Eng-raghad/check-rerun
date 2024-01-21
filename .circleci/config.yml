@@ -323,10 +323,6 @@ executors:
       - image: cimg/node:lts-browsers
 
 jobs:
-  staging-slack-notify:
-    executor: docker-executor
-    steps:
-      - staging_sanity_slack_notification
 
   clean-up:
     circleci_ip_ranges: true
@@ -585,9 +581,6 @@ workflows:
         - << pipeline.parameters.run-sanity >>
     jobs:
       - sanity
-      - sanity-without-native-automation
-      - staging-head-mode
-      - staging-slack-notify
     
   staging-head-mode: 
     when: 
