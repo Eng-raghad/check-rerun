@@ -443,9 +443,8 @@ jobs:
       - prod_sanity_slack_notification
   
   sanity:
-    circleci_ip_ranges: true
     executor: docker-executor
-    parallelism: 10
+    parallelism: 1
     resource_class: large
     steps:
       - default_setup

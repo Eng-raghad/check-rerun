@@ -7,7 +7,7 @@
     "test": "tests"
   },
   "scripts": {
-    "full-suite-without-native-automation": "ENV=staging NATIVE_AUTOMATION=false testcafe --disable-native-automation $(cat /tmp/tests-to-run) -r spec,xunit:/tmp/test-results/testcafe/results.xml"
+    "sanity": "ENV=staging SCOPE=sanity testcafe $(cat /tmp/tests-to-run) -r spec,xunit:/tmp/test-results/testcafe/results.xml"
   },
   "keywords": [],
   "author": "",

@@ -9,7 +9,6 @@ let skipped_tests = [
 
 // List of tests that open new window and thus needs native-automation to be disabled
 let multiple_window_tests = [
-    'user_can_log_into_customer_center_with_magic_link',
     'user_is_able_to_add_a_section_column_row_and_element_to_editor'
 ]
 
