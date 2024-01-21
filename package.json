@@ -7,7 +7,7 @@
     "test": "tests"
   },
   "scripts": {
-    "sanity": "ENV=staging SCOPE=sanity testcafe $(cat /tmp/tests-to-run)"
+    "sanity": "ENV=staging SCOPE=sanity testcafe"
   },
   "keywords": [],
   "author": "",
