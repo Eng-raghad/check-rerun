@@ -2,16 +2,15 @@ import { ClientFunction, Selector } from 'testcafe'
 import CustomerCenterObjects from '../../pages/customer_center_repo'
 import HelperObjects from '../../pages/helpers'
 import MailinatorPageObjects from '../../pages/mailinator_page_repo'
-require('dotenv').config()
 import {test_url, cc_url} from '../../data_config'
 
 fixture `sites - courses 1`
-    .page(`${test_url}`); // Use shared URL
+    .page(process.env.SITE_URL); // Use shared URL
 
 test
   .meta({ scope: 'sanity'})
   .before(async t => {
-    await t.navigateTo(cc_url) // Use shared link of await HelperObjects.get_customer_center_url()
+    await t.navigateTo(process.env.CC_URL) // Use shared link of await HelperObjects.get_customer_center_url()
   })
   ('user_can_log_into_customer_center_with_magic_link', async t => {
 
