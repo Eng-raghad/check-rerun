@@ -1,0 +1,23 @@
+{
+  "name": "native_automation_example",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "sanity-without-native-automation": "ENV=staging SCOPE=sanity NATIVE_AUTOMATION=false testcafe --disable-native-automation $(cat /tmp/tests-to-run) -r spec,xunit:/tmp/test-results/testcafe/results.xml"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "testcafe": "^3.4.0",
+    "testcafe-reporter-xunit": "^2.2.3"
+  },
+  "dependencies": {
+    "dotenv": "^16.3.1",
+    "node": "16.13.0"
+  }
+}

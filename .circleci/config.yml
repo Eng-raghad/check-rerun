@@ -1,0 +1,614 @@
+# Use the latest 2.1 version of CircleCI pipeline process engine. See: https://circleci.com/docs/2.0/configuration-reference
+
+version: 2.1
+# The following build was started from the documentation on this page: https://testcafe.io/documentation/402819/guides/continuous-integration/circleci
+
+parameters:
+  run-clean-up:
+    default: false
+    type: boolean
+  run-full-suite:
+    default: true
+    type: boolean
+  run-full-suite-without-native-automation:
+    default: false
+    type: boolean
+  run-individual:
+    default: false
+    type: boolean
+  run-sanity-head-mode:
+    default: false
+    type: boolean
+  run-isolated:
+    default: false
+    type: boolean
+  run-sanity:
+    default: false
+    type: boolean
+  run-production-sanity-without-native-automation:
+    default: false
+    type: boolean
+  target_env:
+    type: string
+    default: 'staging'
+
+commands:
+  # Any steps that need to be added to a job can be added here and then passed to the job
+  default_setup:
+    steps:
+      - checkout
+      - browser-tools/install-chrome
+      - node/install-packages
+
+  test_reporting:
+    steps:
+      - store_test_results:
+          path: /tmp/test-results
+      - store_artifacts: 
+          path: artifacts/screenshots
+      - store_artifacts:
+          path: artifacts/recordings
+
+  staging_sanity_slack_notification:
+    steps:
+      - slack/notify: # !!IMPORTANT!! This needs to be the last step of the job in order to properly notify of the job
+          channel: C02JD047W1J # Set up to notify in the bot-cf2-sdet channel
+          event: always
+          custom: |
+                {
+                  "blocks": [
+                    {
+                      "type": "section",
+                      "fields": [
+                        {
+                          "type": "mrkdwn",
+                          "text": "*STAGING - SANITY Started*."
+                        }
+                      ]
+                    },
+                    {
+                      "type": "section",
+                      "fields": [
+                        {
+                          "type": "mrkdwn",
+                          "text": "*Job*: ${CIRCLE_JOB}"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "section",
+                      "fields": [
+                        {
+                          "type": "mrkdwn",
+                          "text": "*Project*: $CIRCLE_PROJECT_REPONAME"
+                        },
+                        {
+                          "type": "mrkdwn",
+                          "text": "*Branch*: $CIRCLE_BRANCH"
+                        },
+                        {
+                          "type": "mrkdwn",
+                          "text": "*Author*: $CIRCLE_USERNAME"
+                        }
+                      ],
+                      "accessory": {
+                        "type": "image",
+                        "image_url": "https://www.clipartmax.com/png/small/107-1070612_this-is-fine-kyle-its-lit-feat-iamsu%21.png",
+                        "alt_text": "This is fine"
+                      }
+                    },
+                    {
+                      "type": "actions",
+                      "elements": [
+                        {
+                          "type": "button",
+                          "text": {
+                            "type": "plain_text",
+                            "text": "View Results"
+                          },
+                          "url": "${CIRCLE_BUILD_URL}"
+                        }
+                      ]
+                    }
+                  ]
+                }
+
+  staging_isolated_slack_notification:
+    steps:
+      - slack/notify: # !!IMPORTANT!! This needs to be the last step of the job in order to properly notify of the job
+          channel: C02JD047W1J # Set up to notify in the bot-cf2-sdet channel
+          event: fail
+          custom: |
+                {
+                  "blocks": [
+                    {
+                      "type": "section",
+                      "fields": [
+                        {
+                          "type": "mrkdwn",
+                          "text": "*STAGING - ISOLATED SUITE FAILED*. :red_circle:"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "section",
+                      "fields": [
+                        {
+                          "type": "mrkdwn",
+                          "text": "*Job*: ${CIRCLE_JOB}"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "section",
+                      "fields": [
+                        {
+                          "type": "mrkdwn",
+                          "text": "*Project*: $CIRCLE_PROJECT_REPONAME"
+                        },
+                        {
+                          "type": "mrkdwn",
+                          "text": "*Branch*: $CIRCLE_BRANCH"
+                        },
+                        {
+                          "type": "mrkdwn",
+                          "text": "*Author*: $CIRCLE_USERNAME"
+                        }
+                      ],
+                      "accessory": {
+                        "type": "image",
+                        "image_url": "https://www.clipartmax.com/png/small/107-1070612_this-is-fine-kyle-its-lit-feat-iamsu%21.png",
+                        "alt_text": "This is fine"
+                      }
+                    },
+                    {
+                      "type": "actions",
+                      "elements": [
+                        {
+                          "type": "button",
+                          "text": {
+                            "type": "plain_text",
+                            "text": "View Results"
+                          },
+                          "url": "${CIRCLE_BUILD_URL}"
+                        }
+                      ]
+                    }
+                  ]
+                }
+
+  prod_sanity_slack_notification:
+    steps:
+      - slack/notify:
+          channel: C02JD047W1J
+          event: fail
+          custom: |
+                {
+                  "blocks": [
+                    {
+                      "type": "section",
+                      "fields": [
+                        {
+                          "type": "mrkdwn",
+                          "text": "*PRODUCTION - SANITY FAILED.* :red_circle:"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "section",
+                      "fields": [
+                        {
+                          "type": "mrkdwn",
+                          "text": "*Job*: ${CIRCLE_JOB}"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "section",
+                      "fields": [
+                        {
+                          "type": "mrkdwn",
+                          "text": "*Project*: $CIRCLE_PROJECT_REPONAME"
+                        },
+                        {
+                          "type": "mrkdwn",
+                          "text": "*Branch*: $CIRCLE_BRANCH"
+                        },
+                        {
+                          "type": "mrkdwn",
+                          "text": "*Author*: $CIRCLE_USERNAME"
+                        }
+                      ],
+                      "accessory": {
+                        "type": "image",
+                        "image_url": "https://www.clipartmax.com/png/small/107-1070612_this-is-fine-kyle-its-lit-feat-iamsu%21.png",
+                        "alt_text": "This is fine"
+                      }
+                    },
+                    {
+                      "type": "actions",
+                      "elements": [
+                        {
+                          "type": "button",
+                          "text": {
+                            "type": "plain_text",
+                            "text": "View Results"
+                          },
+                          "url": "${CIRCLE_BUILD_URL}"
+                        }
+                      ]
+                    }
+                  ]
+                }
+          mentions: '@sdet'
+
+  prod_monitor_slack_notification:
+    steps:
+      - slack/notify:
+          channel: C05EP96RENT
+          event: fail
+          custom: |
+                {
+                  "blocks": [
+                    {
+                      "type": "section",
+                      "fields": [
+                        {
+                          "type": "mrkdwn",
+                          "text": "*PRODUCTION - Scheduled Monitor FAILED.* :red_circle:"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "section",
+                      "fields": [
+                        {
+                          "type": "mrkdwn",
+                          "text": "*Job*: ${CIRCLE_JOB}"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "section",
+                      "fields": [
+                        {
+                          "type": "mrkdwn",
+                          "text": "*Failed Tests*: ```$(cat test_results.txt)```"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "section",
+                      "fields": [
+                        {
+                          "type": "mrkdwn",
+                          "text": "*Project*: $CIRCLE_PROJECT_REPONAME"
+                        },
+                        {
+                          "type": "mrkdwn",
+                          "text": "*Branch*: $CIRCLE_BRANCH"
+                        }
+                      ],
+                      "accessory": {
+                        "type": "image",
+                        "image_url": "https://www.clipartmax.com/png/small/107-1070612_this-is-fine-kyle-its-lit-feat-iamsu%21.png",
+                        "alt_text": "This is fine"
+                      }
+                    },
+                    {
+                      "type": "actions",
+                      "elements": [
+                        {
+                          "type": "button",
+                          "text": {
+                            "type": "plain_text",
+                            "text": "View Results"
+                          },
+                          "url": "${CIRCLE_BUILD_URL}"
+                        }
+                      ]
+                    }
+                  ]
+                }
+          mentions: '@sdet'
+
+orbs:
+  node: circleci/node@5.0.1
+  browser-tools: circleci/browser-tools@1.4.0
+  slack: circleci/slack@4.8.3
+
+executors:
+  docker-executor:
+    docker:
+      - image: cimg/node:lts-browsers
+
+jobs:
+  staging-slack-notify:
+    executor: docker-executor
+    steps:
+      - staging_sanity_slack_notification
+
+  clean-up:
+    circleci_ip_ranges: true
+    executor: docker-executor
+    parallelism: 1
+    resource_class: large
+    steps:
+      - default_setup
+      - run:
+          no_output_timeout: 10m
+          command: |
+            circleci tests glob "tests/**/*.js" | circleci tests split --split-by=filesize > /tmp/tests-to-run
+            npm run clean-up
+  
+  full-suite:
+    circleci_ip_ranges: true 
+    executor: docker-executor
+    parallelism: 5
+    resource_class: large
+    steps:
+      - default_setup
+      - run:
+          no_output_timeout: 10m
+          command: |
+            circleci tests glob "tests/**/*.js" | circleci tests split --split-by=filesize > /tmp/tests-to-run 
+            npm run full-suite
+      - test_reporting
+
+  full-suite-without-native-automation:
+    circleci_ip_ranges: true 
+    executor: docker-executor
+    parallelism: 1
+    resource_class: large
+    steps:
+      - default_setup
+      - run:
+          no_output_timeout: 10m
+          command: |
+            circleci tests glob "tests/**/*.js" | circleci tests split --split-by=filesize > /tmp/tests-to-run 
+            npm run full-suite-without-native-automation
+      - test_reporting
+  
+  individual:
+    circleci_ip_ranges: true
+    executor: docker-executor
+    parallelism: 1
+    resource_class: large
+    steps:
+      - default_setup
+      - run:
+          no_output_timeout: 10m
+          command: |
+            circleci tests glob "tests/**/*.js" | circleci tests split --split-by=filesize > /tmp/tests-to-run
+            npm run individual-test
+      - test_reporting
+
+  individual-prod:
+    circleci_ip_ranges: true
+    executor: docker-executor
+    parallelism: 1
+    resource_class: large
+    steps:
+      - default_setup
+      - run:
+          no_output_timeout: 10m
+          command: |
+            circleci tests glob "tests/**/*.js" | circleci tests split --split-by=filesize > /tmp/tests-to-run
+            npm run individual-prod
+      - test_reporting
+  
+  isolated:
+    circleci_ip_ranges: true
+    executor: docker-executor
+    resource_class: large
+    steps:
+      - default_setup
+      - run:
+          no_output_timeout: 10m
+          command: npm run isolated
+      - test_reporting
+      - staging_isolated_slack_notification
+  
+  production-sanity:
+    circleci_ip_ranges: true
+    executor: docker-executor
+    parallelism: 10
+    resource_class: large
+    steps:
+      - default_setup
+      - run:
+          no_output_timeout: 10m
+          command: |
+            circleci tests glob "tests/**/*.js" | circleci tests split --split-by=filesize > /tmp/tests-to-run
+            npm run prod-sanity
+      - test_reporting
+      - prod_sanity_slack_notification
+
+  production-sanity-without-native-automation:
+    circleci_ip_ranges: true
+    executor: docker-executor
+    parallelism: 1
+    resource_class: large
+    steps:
+      - default_setup
+      - run:
+          no_output_timeout: 10m
+          command: |
+            circleci tests glob "tests/**/*.js" | circleci tests split --split-by=filesize > /tmp/tests-to-run
+            npm run prod-sanity-without-native-automation
+      - test_reporting
+      - prod_sanity_slack_notification
+  
+  sanity:
+    circleci_ip_ranges: true
+    executor: docker-executor
+    parallelism: 10
+    resource_class: large
+    steps:
+      - default_setup
+      - run:
+          no_output_timeout: 10m
+          command: |
+            circleci tests glob "tests/**/*.js" | circleci tests split --split-by=filesize > /tmp/tests-to-run
+            npm run sanity
+      - test_reporting
+
+  sanity-without-native-automation:
+    circleci_ip_ranges: true
+    executor: docker-executor
+    parallelism: 1
+    resource_class: large
+    steps:
+      - default_setup
+      - run:
+          no_output_timeout: 10m
+          command: |
+            circleci tests glob "tests/**/*.js" | circleci tests split --split-by=filesize > /tmp/tests-to-run
+            npm run sanity-without-native-automation
+      - test_reporting
+
+  staging-head-mode:
+    circleci_ip_ranges: true
+    executor: docker-executor
+    parallelism: 1
+    resource_class: large
+    steps:
+      - default_setup
+      - run:
+          no_output_timeout: 10m
+          command: |
+            circleci tests glob "tests/**/*.js" | circleci tests split --split-by=filesize > /tmp/tests-to-run
+            npm run staging-head-mode
+      - test_reporting
+
+  production-head-mode:
+    circleci_ip_ranges: true
+    executor: docker-executor
+    parallelism: 1
+    resource_class: large
+    steps:
+      - default_setup
+      - run:
+          no_output_timeout: 10m
+          command: |
+            circleci tests glob "tests/**/*.js" | circleci tests split --split-by=filesize > /tmp/tests-to-run
+            npm run prod-head-mode
+      - test_reporting
+
+  monitor-30-min:
+    circleci_ip_ranges: true
+    executor: docker-executor
+    parallelism: 1
+    resource_class: large
+    steps:
+      - default_setup
+      - run:
+          name: Run Suite
+          no_output_timeout: 10m
+          command: |
+            circleci tests glob "tests/**/*.js" | circleci tests split --split-by=filesize > /tmp/tests-to-run
+            npm run monitor-30-min
+      - run:
+          name: Parse TestCafe XML results
+          command: |
+            node xml_parsing.js > test_results.txt
+            cat test_results.txt
+          when: always
+      - prod_monitor_slack_notification
+      - test_reporting
+
+workflows: 
+# Manual Jobs
+  clean-up:
+    when: << pipeline.parameters.run-clean-up >>
+    jobs:
+      - clean-up
+  
+  individual:
+    when: 
+      and:
+        - equal: [ staging, << pipeline.parameters.target_env >> ]
+        - << pipeline.parameters.run-individual >>
+    jobs:
+      - individual
+
+  individual-prod:
+    when: 
+      and:  
+        - equal: [ prod, << pipeline.parameters.target_env >> ]
+        - << pipeline.parameters.run-individual >>
+    jobs:
+      - individual-prod
+  
+  isolated:
+    when: << pipeline.parameters.run-isolated >>
+    jobs:
+      - isolated
+  
+  full-suite:
+    when: << pipeline.parameters.run-full-suite >>
+    jobs:
+      - full-suite
+      - full-suite-without-native-automation
+      - staging-head-mode
+  
+  full-suite-without-native-automation:
+    when: << pipeline.parameters.run-full-suite-without-native-automation >>
+    jobs:
+      - full-suite-without-native-automation
+
+
+  production-sanity:
+    when: 
+      and:  
+        - equal: [ prod, << pipeline.parameters.target_env >> ]
+        - << pipeline.parameters.run-sanity >>
+    jobs:
+      - production-sanity
+      - production-sanity-without-native-automation
+      - production-head-mode
+  
+  production-sanity-without-native-automation:
+    when: 
+      and:
+        - equal: [ prod, << pipeline.parameters.target_env >> ]
+        - << pipeline.parameters.run-production-sanity-without-native-automation >>
+    jobs:
+      - production-sanity-without-native-automation
+  
+  sanity: 
+    when: 
+      and:  
+        - equal: [ staging, << pipeline.parameters.target_env >> ]
+        - << pipeline.parameters.run-sanity >>
+    jobs:
+      - sanity
+      - sanity-without-native-automation
+      - staging-head-mode
+      - staging-slack-notify
+    
+  staging-head-mode: 
+    when: 
+      and:  
+        - equal: [ staging, << pipeline.parameters.target_env >> ]
+        - << pipeline.parameters.run-sanity-head-mode >>
+    jobs:
+      - staging-head-mode
+
+  production-head-mode: 
+    when: 
+      and:  
+        - equal: [ prod, << pipeline.parameters.target_env >> ]
+        - << pipeline.parameters.run-sanity-head-mode >>
+    jobs:
+      - production-head-mode
+
+# Scheduled Jobs
+
+  monitor-30-min:
+    when:
+      and:
+        - equal: [ scheduled_pipeline, << pipeline.trigger_source >> ]
+        - equal: [ "monitor-30-min", << pipeline.schedule.name >> ]
+    jobs:
+      - monitor-30-min

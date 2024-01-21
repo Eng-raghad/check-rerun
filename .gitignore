@@ -1,0 +1,7 @@
+.vscode/*
+!.vscode/testcafe_snippets.code-snippets
+artifacts
+node_modules
+*.log
+.DS_Store
+*.env
