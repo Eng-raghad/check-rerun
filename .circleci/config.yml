@@ -361,9 +361,9 @@ jobs:
     resource_class: large
     steps:
       - default_setup
-      -run:
-        name: Debug working directory
-        command: |
+      - run:
+          name: Debug working directory
+          command: |
           pwd
       - run:
           no_output_timeout: 10m
