@@ -9,7 +9,7 @@ fixture `sites - courses 1`
     .page(test_url); // Use shared URL
 
 test
-  .meta({ scope: 'sanity', native_automation: 'false' })
+  .meta({ scope: 'sanity'})
   .before(async t => {
     await t.navigateTo(cc_url) // Use shared link of await HelperObjects.get_customer_center_url()
   })
@@ -36,7 +36,7 @@ test
   })
 
   test
-  .meta({ scope: 'sanity', native_automation: 'false' })
+  .meta({ scope: 'sanity' })
   ('login_page_loads', async t => {
     await t.expect(HelperObjects.btn_continue_request_magic_link.visible, {timeout: 2000}).notOk()
 
