@@ -1,10 +1,9 @@
 import { ClientFunction, Selector } from 'testcafe'
-import CustomerCenterObjects from '../pages/customer_center_repo'
-import HelperObjects from '../pages/helpers'
-import MailinatorPageObjects from '../pages/mailinator_page_repo'
+import CustomerCenterObjects from '../../pages/customer_center_repo'
+import HelperObjects from '../../pages/helpers'
+import MailinatorPageObjects from '../../pages/mailinator_page_repo'
 require('dotenv').config()
-import {test_url} from '../data_config'
-import {cc_url} from '../data_config'
+import {test_url, cc_url} from '../../data_config'
 
 fixture `sites - courses 1`
     .page(test_url); // Use shared URL
@@ -12,7 +11,7 @@ fixture `sites - courses 1`
 test
   .meta({ scope: 'regression', native_automation: 'false' })
   .before(async t => {
-    await t.navigateTo('cc_url') // Use shared link of await HelperObjects.get_customer_center_url()
+    await t.navigateTo(cc_url) // Use shared link of await HelperObjects.get_customer_center_url()
   })
   ('user_can_log_into_customer_center_with_magic_link', async t => {
 
@@ -39,6 +38,6 @@ test
   test
   .meta({ scope: 'regression', native_automation: 'false' })
   ('login_page_loads', async t => {
-    await t.expect(HelperObjects.btn_continue_request_magic_link.visible).notOk()
+    await t.expect(HelperObjects.btn_continue_request_magic_link.visible, {timeout: 2000}).notOk()
 
   })

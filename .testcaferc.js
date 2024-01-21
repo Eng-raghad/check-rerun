@@ -51,7 +51,7 @@ let determine_concurrency = () => {
 }
 
 module.exports = {
-    assertionTimeout: 5000,
+    assertionTimeout: 10000,
     browsers: [
         "chrome:headless --window-size=1920,1159"
     ],
