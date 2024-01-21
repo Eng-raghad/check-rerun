@@ -24,9 +24,20 @@ let build_filter = () => {
     
     switch(process.env.ENV) {
         case 'staging':
-            filter = {
-                testGrep: `^(?!.*(${full_filter.join('|')})).*$`
+            if(process.env.NATIVE_AUTOMATION) {
+                filter = {
+                    testGrep: `^(?!.*(${skipped_tests.join('|')})).*$`,
+                    testMeta: {
+                        native_automation: process.env.NATIVE_AUTOMATION
+                    }
+                }
             }
+            else {
+                filter = {
+                    testGrep: `^(?!.*(${full_filter.join('|')})).*$`
+                }
+            }
+            break
     }
     return filter
 }
