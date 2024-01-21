@@ -364,7 +364,7 @@ jobs:
       - run:
           name: Debug working directory
           command: |
-          pwd
+            pwd
       - run:
           no_output_timeout: 10m
           command: |
