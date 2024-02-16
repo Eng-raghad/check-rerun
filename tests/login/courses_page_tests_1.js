@@ -20,7 +20,7 @@ test
     const mailinator_url = 'https://www.mailinator.com/'
     const email_title = "My Workspace\'s Site - Magic Link Request"
 
-    await t.expect(Selector('input').withAttribute('value', 'Continue').visible).ok()
+    await t.expect(Selector('input').withAttribute('value', 'Continue').filterVisible().visible).ok()
     //await CustomerCenterObjects.request_magic_link(contact_email)
 
     // Adding this to avoid race condition where it starts searching for the email in Mailinator before the navigation begins  
