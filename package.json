@@ -7,7 +7,7 @@
     "test": "tests"
   },
   "scripts": {
-    "sanity": "ENV=staging SCOPE=sanity testcafe"
+    "sanity": "ENV=staging SCOPE=sanity testcafe $(cat /tmp/tests-to-run) --reporter spec,xunit:/tmp/test-results/testcafe/results.xml"
   },
   "keywords": [],
   "author": "",
