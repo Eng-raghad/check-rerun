@@ -14,6 +14,7 @@
   "license": "ISC",
   "devDependencies": {
     "testcafe": "^3.4.0",
+    "testcafe-reporter-junit": "^3.0.2",
     "testcafe-reporter-xunit": "^2.2.3"
   },
   "dependencies": {
