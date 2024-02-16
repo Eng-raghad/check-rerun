@@ -12,6 +12,10 @@ let multiple_window_tests = [
     'user_is_able_to_add_a_section_column_row_and_element_to_editor'
 ]
 
+// Filter that joins ALL skipped tests, tests that deal with multiple windows and marketing funnels tests on production
+let skipped_and_multi_windows_and_prod_marketing_funnels = skipped_tests.concat(multiple_window_tests)
+
+
 // Filter that joins ALL filtered scripts so that they are not run for a full suite
 let full_filter = skipped_tests.concat(multiple_window_tests)
 
@@ -28,6 +32,14 @@ let build_filter = () => {
                     testGrep: `^(?!.*(${skipped_tests.join('|')})).*$`,
                     testMeta: {
                         native_automation: process.env.NATIVE_AUTOMATION
+                    }
+                }
+            }
+            else if(process.env.SCOPE) {
+                filter = {
+                    testGrep: `^(?!.*(${skipped_and_multi_windows_and_prod_marketing_funnels.join('|')})).*$`, 
+                    testMeta: {
+                        scope: process.env.SCOPE
                     }
                 }
             }
