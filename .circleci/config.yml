@@ -449,7 +449,7 @@ jobs:
           command: |
             circleci tests glob "tests/**/*.js" > /tmp/tests-to-run| 
             circleci tests run --command="xargs 
-            npx testcafe run < /tmp/tests-to-run" --verbose
+            npx testcafe run $(cat /tmp/tests-to-run)" --r xunit:/tmp/test-results/testcafe/results.xml --verbose
       - test_reporting
 
   sanity-without-native-automation:
