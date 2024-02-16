@@ -449,7 +449,7 @@ jobs:
           command: |
             circleci tests glob "tests/**/*.js" > /tmp/tests-to-run
             cat /tmp/tests-to-run | circleci tests run --command="xargs 
-            npx npm run sanity" --verbose
+            npx npm run sanity" --verbose --split-by=timings
       - test_reporting
 
   sanity-without-native-automation:
