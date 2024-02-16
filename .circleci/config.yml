@@ -445,10 +445,6 @@ jobs:
     steps:
       - default_setup
       - run:
-          name: Install coverage reporter
-          command: |
-            npm install --save-dev testcafe-reporter-xunit
-      - run:
           no_output_timeout: 10m
           command: |
             circleci tests glob "tests/**/*.js" | circleci tests run --command="xargs 
