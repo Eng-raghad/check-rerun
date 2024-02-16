@@ -440,7 +440,7 @@ jobs:
   
   sanity:
     executor: docker-executor
-    parallelism: 1
+    parallelism: 2
     resource_class: large
     steps:
       - default_setup
