@@ -447,7 +447,7 @@ jobs:
       - run:
           no_output_timeout: 10m
           command: |
-            circleci tests glob "tests/**/*.js" | circleci tests split --split-by=filesize > /tmp/tests-to-run
+            circleci tests glob "tests/**/*.js" | circleci tests run --command="xargs npx npm run sanity" --split-by=filesize --verbose
             npm run sanity --verbose
       - test_reporting
 
