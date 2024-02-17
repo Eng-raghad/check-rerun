@@ -11,12 +11,12 @@ fixture `login`
 
 test
   .meta({ scope: 'sanity' })
-  ('login_page_loads_without issues', async t => {
+  ('login_page_loads_without_issues', async t => {
     await t.expect(HelperObjects.btn_continue_request_magic_link.visible, {timeout: 2000}).ok()
   })
 
 test
   .meta({ scope: 'sanity' })
-  ('extra_test_login_page_loads_without issues', async t => {
+  ('extra_test_login_page_loads_without_issues', async t => {
     await t.expect(HelperObjects.btn_continue_request_magic_link.visible, {timeout: 2000}).ok()
   })
