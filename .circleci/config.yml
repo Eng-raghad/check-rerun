@@ -448,7 +448,7 @@ jobs:
           no_output_timeout: 10m
           command: |
             circleci tests glob "tests/**/*.js" | circleci tests split --split-by=filesize > /tmp/tests-to-run
-            cat /tmp/tests-to-run | npm run sanity --verbose
+            npm run sanity --verbose
       - test_reporting
 
   sanity-without-native-automation:
