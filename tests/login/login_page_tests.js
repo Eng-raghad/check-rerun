@@ -15,8 +15,3 @@ test
     await t.expect(HelperObjects.btn_continue_request_magic_link.visible, {timeout: 2000}).ok()
   })
 
-test
-  .meta({ scope: 'regression' })
-  ('extra_test_login_page_loads_without_issues', async t => {
-    await t.expect(HelperObjects.btn_continue_request_magic_link.visible, {timeout: 2000}).ok()
-  })

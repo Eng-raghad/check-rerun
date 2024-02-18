@@ -40,3 +40,9 @@ test
   ('login_page_loads_with_issues', async t => {
     await t.expect(HelperObjects.btn_continue_request_magic_link.visible, {timeout: 2000}).notOk()
   })
+
+test
+  .meta({ scope: 'sanity' })
+  ('extra_test_login_page_loads_without_issues', async t => {
+    await t.expect(HelperObjects.btn_continue_request_magic_link.visible, {timeout: 2000}).ok()
+  })
