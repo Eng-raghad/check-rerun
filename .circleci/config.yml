@@ -444,13 +444,13 @@ jobs:
     resource_class: large
     steps:
       - default_setup
-      -run: mkdir ~/junit
+      - run: mkdir ~/junit
       - run:
           no_output_timeout: 10m
           command: |
             circleci tests glob "tests/**/*.js" | circleci tests run --command="xargs
             npx npm run sanity_run" --verbose 
-      -run:
+      - run:
           command: cp junit.xml ~/junit
           when: always
 
