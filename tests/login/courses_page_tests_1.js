@@ -36,7 +36,7 @@ test
   })
 
 test
-  .meta({ scope: 'sanity' })
+  .meta({ scope: 'regression' })
   ('login_page_loads_with_issues', async t => {
     await t.expect(HelperObjects.btn_continue_request_magic_link.visible, {timeout: 2000}).notOk()
   })
