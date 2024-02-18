@@ -451,7 +451,7 @@ jobs:
             circleci tests glob "tests/**/*.js" | circleci tests run --command="xargs
             npx npm run sanity_run" --verbose 
       - run:
-          command: cp junit.xml ~/junit
+          command: cp /tmp/test-results/testcafe/results.xml ~/junit
           when: always
 
       - test_reporting
