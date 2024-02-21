@@ -43,7 +43,7 @@ commands:
   test_reporting:
     steps:
       - store_test_results:
-          path: results.xml
+          path: test-results
       - store_artifacts: 
           path: artifacts/screenshots
       - store_artifacts:
