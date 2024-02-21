@@ -448,7 +448,7 @@ jobs:
           no_output_timeout: 10m
           command: |
             mkdir test_results
-            cd project
+            cd tests
             TESTFILES=$(circleci tests glob "tests/**/*.js") 
             echo "$TESTFILES" | circleci tests run --command="xargs npx npm run sanity_run" --verbose --split-by=timings
       - test_reporting
