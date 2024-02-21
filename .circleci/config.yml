@@ -43,7 +43,7 @@ commands:
   test_reporting:
     steps:
       - store_test_results:
-          path: test_results
+          path: results.xml
       - store_artifacts: 
           path: artifacts/screenshots
       - store_artifacts:
@@ -451,9 +451,10 @@ jobs:
             cd ./tests
             npm ci
             npm run start &
-            circleci tests glob "tests/**/*.js" | 
-            circleci tests run --command="xargs
-            npx npm run sanity_run" --verbose --split-by=timings
+            TESTFILES=$(circleci tests glob "tests/**/*.js") 
+            echo "$TESTFILES" | circleci tests run --
+            command="xargs npx npm run sanity_run" --verbose
+            --split-by=timings
       - test_reporting
 
   sanity-without-native-automation:
