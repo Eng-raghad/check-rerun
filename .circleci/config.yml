@@ -38,7 +38,7 @@ commands:
     steps:
       - checkout
       - browser-tools/install-browser-tools:
-          chrome-version: 121.0.6261.184
+          chrome-version: 121.0.6167.184
       - node/install-packages
 
   test_reporting:
