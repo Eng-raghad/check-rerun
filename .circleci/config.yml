@@ -451,7 +451,7 @@ jobs:
       - run:
           no_output_timeout: 10m
           command: |
-            cat >files.txt | circleci tests run --command="xargs
+            circleci tests run --command=">files.txt xargs
             npx npm run sanity_run"
       - test_reporting
 
