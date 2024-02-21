@@ -37,7 +37,8 @@ commands:
   default_setup:
     steps:
       - checkout
-      - browser-tools/install-chrome
+      - browser-tools/install-browser-tools:
+          chrome-version: 121.0.6261.184
       - node/install-packages
 
   test_reporting:
@@ -314,7 +315,7 @@ commands:
 
 orbs:
   node: circleci/node@5.0.1
-  browser-tools: circleci/browser-tools@1.4.0
+  browser-tools: circleci/browser-tools@1.4.7
   slack: circleci/slack@4.8.3
 
 executors:
