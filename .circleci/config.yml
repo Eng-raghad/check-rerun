@@ -450,7 +450,6 @@ jobs:
             mkdir test_results
             cd ./tests
             npm ci
-            npm run start &
             TESTFILES=$(circleci tests glob "tests/**/*.js") 
             echo "$TESTFILES" | circleci tests run --
             command="xargs npx npm run sanity_run" --verbose
