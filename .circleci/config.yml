@@ -446,13 +446,9 @@ jobs:
     steps:
       - default_setup
       - run:
-          command:
-            circleci tests glob "tests/**/*js" | circleci tests run --command=">files.txt xargs echo" --verbose --split-by=timings
-      - run:
           no_output_timeout: 10m
-          command: |
-            circleci tests run --command=">files.txt xargs
-            npx npm run sanity_run"
+          command:
+            circleci tests glob "tests/**/*js" | circleci tests run --command=">files.txt xargs npx npm run sanity_run" --verbose --split-by=timings
       - test_reporting
 
   sanity-without-native-automation:
