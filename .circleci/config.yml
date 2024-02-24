@@ -443,13 +443,17 @@ jobs:
     executor: docker-executor
     parallelism: 2
     resource_class: large
+    environment:
+      ENV="staging"
+      SCOPE="sanity"
     steps:
       - default_setup
       - run:
           no_output_timeout: 10m
           command: |
             circleci tests glob "tests/**/*.js" | circleci tests run --command="xargs
-            npx ENV=staging SCOPE=sanity testcafe --reporter spec,xunit:/tmp/test-results/testcafe/results.xml" --split-by=filesize --verbose
+            npx testcafe --env ENV=${ENV} --env SCOPE=${SCOPE} --reporter
+            spec,xunit:/tmp/test-results/testcafe/results.xml" --split-by=filesize --verbose
       - test_reporting
 
   sanity-without-native-automation:
