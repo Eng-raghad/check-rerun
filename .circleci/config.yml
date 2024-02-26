@@ -451,10 +451,8 @@ jobs:
       - run:
           no_output_timeout: 10m
           command: |
-            circleci tests glob "tests/**/*.js" | circleci tests run --command="xargs \
-            npx testcafe --reporter spec,xunit:/tmp/test-results/testcafe/results.xml" \
-            --env ENV=${ENV} \
-            --env SCOPE=${SCOPE} \
+            circleci tests glob "tests/**/*.js" | ENV=${ENV} SCOPE=${SCOPE} | \
+            circleci tests run --command="xargs npx testcafe --reporter spec,xunit:/tmp/test-results/testcafe/results.xml" \
             --split-by=timings --verbose
       - test_reporting
 
