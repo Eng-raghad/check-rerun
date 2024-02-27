@@ -444,8 +444,8 @@ jobs:
     parallelism: 2
     resource_class: large
     environment:
-      ENV= staging
-      SCOPE= sanity
+      ENV=staging
+      SCOPE=sanity
     steps:
       - default_setup
       - run:
