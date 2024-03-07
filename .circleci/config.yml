@@ -44,7 +44,7 @@ commands:
   test_reporting:
     steps:
       - store_test_results:
-          path: /tmp/test-results
+          path: /tmp/test-results/testcafe/results.xml
       - store_artifacts: 
           path: artifacts/screenshots
       - store_artifacts:
