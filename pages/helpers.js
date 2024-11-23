@@ -7,7 +7,7 @@ class HelperObjects {
 
     }
   
-  
+    // Comment
     async wait_for_flash_alert(checks = 30) {
   
       // Purpose: To wait for the flash alert to appear and then disappear
